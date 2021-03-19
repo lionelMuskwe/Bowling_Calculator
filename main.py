@@ -11,9 +11,9 @@ def printAllFrames():
 
 def rollTurn():
     if Frame.framesPlayedCounter <= 9:
-        print("Frame Number {0}".format(Frame.framesPlayedCounter + 1)) # adds to static variable which tracks number of frames played
+        print("\tFrame Number {0}".format(Frame.framesPlayedCounter + 1)) # adds to static variable which tracks number of frames played
         while True:
-            ball_one = input("Ball [1] pins knocked down :")
+            ball_one = input("\tBall [1] pins knocked down :")
             if ball_one.isdigit():
                 ball_one = int(ball_one)
                 if ball_one <= 10:
