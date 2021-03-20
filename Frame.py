@@ -9,7 +9,6 @@ class Frame:
         self.ballOneScore = ball_one
         self.ballTwoScore = ball_two
         self.turnScore = ball_one + ball_two
-        self.turnType = ""
         self.framePosition = Frame.framesPlayedCounter
 
         if ball_one == 10 or ball_two == 10:
@@ -21,8 +20,8 @@ class Frame:
         else:
             self.turnType = "normal"
 
-        if Frame.framesPlayedCounter > 1:
-            self.turnScore += Scoreboard.rows[Frame.framesPlayedCounter - 1][2]
+        # if Frame.framesPlayedCounter > 0:
+            # self.turnScore += Scoreboard.rows[Frame.framesPlayedCounter - 1][2]
 
 
         self.playedFrameValues = [self.ballOneScore, self.ballTwoScore, self.turnScore]
@@ -38,8 +37,8 @@ class Frame:
         # print("New frame added: ", self.playedTurnValues) #Used for Debugging
 
         #checking if the last frame was a strike
-        if Frame.framesPlayedCounter > 0:
-
+        if Frame.framesPlayedCounter > 1:
+            print("--------------DEBUG this code  ran")
             if Frame.savedPlayedFrames[self.framePosition - 1].turnType == "strike":
                 print("Last frame was a strike")
                 self.lastballWasStrike()
@@ -50,11 +49,9 @@ class Frame:
                 self.lastballWasSpare()
                 Frame.sendValuesToScoreboard(Frame.savedPlayedFrames)
 
+        Frame.getTotalScore(Frame.savedPlayedFrames)
 
-            else:
-                print("Might have been a normal frame")
-
-
+    # the code below handles strikes and spares
     def updateScoreboard(self):
         Scoreboard.rows[self.framePosition] = self.playedFrameValues
 
@@ -77,3 +74,10 @@ class Frame:
         for i in allFrames:
             i.updateScoreboard()
         Scoreboard.printScoreBoard(Scoreboard)
+
+    def getTotalScore(allFrames):
+        Scoreboard.totalScore = 0
+        for i in allFrames:
+            frameScore = i.playedFrameValues[2]
+            Scoreboard.totalScore += frameScore
+            print("Total Score = ", Scoreboard.totalScore)

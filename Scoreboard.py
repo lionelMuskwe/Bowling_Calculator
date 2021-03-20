@@ -1,5 +1,6 @@
 class Scoreboard:
     rows = []
+    totalScore = 0
 
     def __init__(self):
         for i in range(10):

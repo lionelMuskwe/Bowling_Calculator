@@ -6,8 +6,8 @@ newScoreboard = Scoreboard()
 cls = lambda: os.system("cls")
 
 def printAllFrames():
-    for i in Frame.framesPlayed:
-        print(i)
+    for i in Frame.savedPlayedFrames:
+        print(i.playedFrameValues)
 
 def rollTurn():
     if Frame.framesPlayedCounter <= 9:
@@ -52,4 +52,4 @@ newScoreboard.printScoreBoard()
 
 while True:
     rollTurn()
-    # printAllFrames()
+    printAllFrames()
