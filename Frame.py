@@ -42,20 +42,35 @@ class Frame:
 
             if Frame.savedPlayedFrames[self.framePosition - 1].turnType == "strike":
                 print("Last frame was a strike")
+                self.lastballWasStrike()
                 Frame.sendValuesToScoreboard(Frame.savedPlayedFrames)
 
             elif Frame.savedPlayedFrames[self.framePosition - 1].turnType == "spare":
                 print("Last frame was a spare")
+                self.lastballWasSpare()
+                Frame.sendValuesToScoreboard(Frame.savedPlayedFrames)
+
 
             else:
                 print("Might have been a normal frame")
 
 
     def updateScoreboard(self):
-        print("---Updating  Scoreboard with new values")
-        Frame.savedPlayedFrames[self.framePosition - 1].playedFrameValues[2] += self.ballOneScore # this is where the extra value is being added
         Scoreboard.rows[self.framePosition] = self.playedFrameValues
+
+    def lastballWasStrike(self):
+        print("---Updating  Scoreboard with new values")
+        Frame.savedPlayedFrames[self.framePosition - 1].playedFrameValues[2] += self.ballOneScore  # this is where the extra value is being added
         print("---Done changing new values")
+
+        if self.ballOneScore < 10:
+            Frame.savedPlayedFrames[self.framePosition - 1].playedFrameValues[2] += self.ballTwoScore  # adding the second ball
+            print("---Second ball value added")
+
+    def lastballWasSpare(self):
+        print("---Updating  Scoreboard with new values")
+        Frame.savedPlayedFrames[self.framePosition - 1].playedFrameValues[2] += self.ballOneScore  # this is where the extra value is being added
+        print("---Spare score added")
 
 
     def sendValuesToScoreboard(allFrames):
