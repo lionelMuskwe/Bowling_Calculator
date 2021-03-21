@@ -1,9 +1,11 @@
 import time
 from Scoreboard import *
+import click
+
 
 class Frame:
-    framesPlayedCounter = 0
-    savedPlayedFrames = []
+    framesPlayedCounter = 0  # keeps track of the number of frames created/ instanced
+    savedPlayedFrames = []  # all the Frames are stored as classes in this file
 
     def __init__(self, ball_one, ball_two):
         self.ballOneScore = ball_one
@@ -20,64 +22,55 @@ class Frame:
         else:
             self.turnType = "normal"
 
-        # if Frame.framesPlayedCounter > 0:
-            # self.turnScore += Scoreboard.rows[Frame.framesPlayedCounter - 1][2]
-
-
-        self.playedFrameValues = [self.ballOneScore, self.ballTwoScore, self.turnScore]
+        self.playedFrameValues = [self.ballOneScore, self.ballTwoScore, self.turnScore] # array of Frame values
         Frame.savedPlayedFrames.append(self)
         Scoreboard.rows[Frame.framesPlayedCounter] = self.playedFrameValues
-        Scoreboard.printScoreBoard(Scoreboard)
-
-        # debugging lines of code
-        # print("\t\t[DEBUG] Frame Counter    :", Frame.framesPlayedCounter)
-        # print("\t\t[DEBUG] ScoreboardFrames :", Scoreboard.rows)
 
         Frame.framesPlayedCounter += 1  # registed as a played frame
-        # print("New frame added: ", self.playedTurnValues) #Used for Debugging
 
-        #checking if the last frame was a strike
+        # checking if the last frame was a strike or spare.
+        # It only runs, when on Frame 2 and above
         if Frame.framesPlayedCounter > 1:
-            print("--------------DEBUG this code  ran")
             if Frame.savedPlayedFrames[self.framePosition - 1].turnType == "strike":
-                print("Last frame was a strike")
                 self.lastballWasStrike()
                 Frame.sendValuesToScoreboard(Frame.savedPlayedFrames)
 
             elif Frame.savedPlayedFrames[self.framePosition - 1].turnType == "spare":
-                print("Last frame was a spare")
                 self.lastballWasSpare()
                 Frame.sendValuesToScoreboard(Frame.savedPlayedFrames)
 
-        Frame.getTotalScore(Frame.savedPlayedFrames)
+        Frame.getTotalScore(self, Frame.savedPlayedFrames)
+        click.clear()
+        Scoreboard.printScoreBoard(Scoreboard)  # calls the print Scoreboard function found in the Scoreboard class
+
 
     # the code below handles strikes and spares
     def updateScoreboard(self):
         Scoreboard.rows[self.framePosition] = self.playedFrameValues
 
-    def lastballWasStrike(self):
-        print("---Updating  Scoreboard with new values")
-        Frame.savedPlayedFrames[self.framePosition - 1].playedFrameValues[2] += self.ballOneScore  # this is where the extra value is being added
-        print("---Done changing new values")
+    def lastballWasStrike(self):  # runs if last ball was a spare
+        Frame.savedPlayedFrames[self.framePosition - 1].turnScore += self.ballOneScore  # this is where the extra value is being added
 
         if self.ballOneScore < 10:
-            Frame.savedPlayedFrames[self.framePosition - 1].playedFrameValues[2] += self.ballTwoScore  # adding the second ball
-            print("---Second ball value added")
+            Frame.savedPlayedFrames[self.framePosition - 1].turnScore += self.ballTwoScore  # adding the second ball
 
-    def lastballWasSpare(self):
-        print("---Updating  Scoreboard with new values")
-        Frame.savedPlayedFrames[self.framePosition - 1].playedFrameValues[2] += self.ballOneScore  # this is where the extra value is being added
-        print("---Spare score added")
+    def lastballWasSpare(self): # runs if last ball was a spare
+        Frame.savedPlayedFrames[self.framePosition - 1].turnScore += self.ballOneScore  # this is where the extra value is being added
 
-
-    def sendValuesToScoreboard(allFrames):
+    def sendValuesToScoreboard(allFrames):  # updates the values on the scoreboard, after each frame ends
         for i in allFrames:
             i.updateScoreboard()
-        Scoreboard.printScoreBoard(Scoreboard)
 
-    def getTotalScore(allFrames):
+    def getTotalScore(self, allFrames):
+        # this function, loops all played frames then using a running variable, it begins to assigning values to the
+        # third position "playedFrameValues[]" dynamically
+
         Scoreboard.totalScore = 0
-        for i in allFrames:
-            frameScore = i.playedFrameValues[2]
-            Scoreboard.totalScore += frameScore
-            print("Total Score = ", Scoreboard.totalScore)
+        if Frame.framesPlayedCounter > 0:
+            for i in allFrames:
+                frameScore = i.turnScore
+                Scoreboard.totalScore += frameScore
+                self.playedFrameValues[2] = Scoreboard.totalScore
+        else:
+            Scoreboard.totalScore = allFrames[0].turnScore
+            self.playedFrameValues[2] = Scoreboard.totalScore

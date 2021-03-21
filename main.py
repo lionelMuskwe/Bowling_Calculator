@@ -1,17 +1,11 @@
 from Scoreboard import *
 from Frame import *
-import os
 
 newScoreboard = Scoreboard()
-cls = lambda: os.system("cls")
-
-def printAllFrames():
-    for i in Frame.savedPlayedFrames:
-        print(i.playedFrameValues)
 
 def rollTurn():
     if Frame.framesPlayedCounter <= 9:
-        print("\tFrame Number {0}".format(Frame.framesPlayedCounter + 1)) # adds to static variable which tracks number of frames played
+        print("\n\tFrame Number {0}".format(Frame.framesPlayedCounter + 1))  # adds to static variable which tracks number of frames played
         while True:
             ball_one = input("\tBall [1] pins knocked down :")
             if ball_one.isdigit():
@@ -25,7 +19,7 @@ def rollTurn():
 
         while True:
             if ball_one != 10: # if first ball is 10 then second ball input is not required
-                ball_two = input("Ball [2] pins knocked down :")
+                ball_two = input("\tBall [2] pins knocked down :")
                 if ball_two.isdigit():
                     ball_two = int(ball_two)
                     break
@@ -45,11 +39,11 @@ def rollTurn():
 
     else:
         print("All 10 frames have been played")
+        input("Press anything to exit")  # stops program from closing after completion
         exit()
 
 
-newScoreboard.printScoreBoard()
+newScoreboard.printScoreBoard()  # this prints the first scoreboard with all zeroes
 
 while True:
     rollTurn()
-    printAllFrames()
